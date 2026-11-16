@@ -1,2 +1,10 @@
-/* Hide the dark back mountain so the foreground range reads cleaner. */
+/* Restore the layered evergreen hero artwork while keeping the requested badge and scroll prompt removed. */
+.hero-pine{position:absolute;z-index:3;display:block;width:clamp(62px,8.5vw,104px);height:auto;bottom:15%;filter:drop-shadow(0 5px 3px rgba(20,54,60,.12));overflow:visible}
+.hero-pine-one{left:18%;width:clamp(64px,8vw,96px)}
+.hero-pine-two{left:28%;bottom:11%;width:clamp(48px,6.1vw,73px)}
+.pine-trunk{fill:#674f3e}.pine-bough-back{fill:#214f50}.pine-bough-front{fill:#326b69}.pine-snow{fill:#b8d2cf;opacity:.92}
+.hero-stamp,.scroll-cue{display:none!important}
+.hero-foot{bottom:15px;align-items:flex-end;justify-content:flex-start}
 .hero-art .mountain-back{display:none!important}
+@media(max-width:850px){.hero-pine{width:clamp(62px,8vw,90px)}.hero-pine-one{width:clamp(64px,7.8vw,88px)}.hero-pine-two{width:clamp(48px,6vw,67px)}}
+@media(max-width:650px){.hero-pine{width:70px}.hero-pine-one{width:70px;left:18%}.hero-pine-two{width:54px;left:29%;bottom:11%}.hero-foot{bottom:8px}}
