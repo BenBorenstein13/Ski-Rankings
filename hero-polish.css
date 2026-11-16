@@ -1,3 +1,2 @@
-/* Hide the decorative badge and scroll prompt from the hero. */
-.hero-stamp,.scroll-cue{display:none!important}
-.hero-foot{justify-content:flex-start}
+/* Hide the dark back mountain so the foreground range reads cleaner. */
+.hero-art .mountain-back{display:none!important}
