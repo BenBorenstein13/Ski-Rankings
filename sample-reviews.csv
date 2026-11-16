@@ -1,25 +1,37 @@
-Timestamp,Resort,Region,Pass,Month Visited,Snow (1-10),Terrain (1-10),Crowds (1-10, 10 = no crowds),Price (1-10, 10 = cheap),Review
-2025-01-18,Alta,Utah,Ikon,January,9,9,7,6,"Deep powder and incredible terrain. Get there early for the best day."
-2025-02-08,Alta,Utah,Ikon,February,10,9,6,6,"The best snow day of the season. Lots of great lines for strong skiers."
-2025-03-12,Alta,Utah,Ikon,March,8,9,8,7,"Still fantastic snow and fewer people midweek. A mountain worth returning to."
-2025-01-25,Snowbird,Utah,Ikon,January,10,10,5,5,"Huge terrain and deep snow. The tram gets busy but the mountain is worth it."
-2025-02-20,Snowbird,Utah,Ikon,February,9,10,6,5,"Amazing steeps and snow. Plenty of mountain to explore even on a busy day."
-2025-03-05,Snowbird,Utah,Ikon,March,8,9,7,6,"Great spring conditions and a little more room to roam."
-2025-01-14,Park City,Utah,Ikon,January,7,8,5,5,"Lots of terrain and fun places to explore. Crowds build near the base."
-2025-02-16,Park City,Utah,Ikon,February,8,8,5,4,"A huge mountain with something for everyone. Lift lines can be long."
-2025-03-22,Park City,Utah,Ikon,March,7,8,7,6,"Quieter later in the season, with sunny afternoons and plenty of groomers."
-2025-01-10,Jackson Hole,Wyoming,Ikon,January,9,10,6,5,"Big mountain energy, excellent snow, and terrain that keeps you coming back."
-2025-02-04,Jackson Hole,Wyoming,Ikon,February,10,10,5,4,"Excellent snowfall and steep terrain. Plan ahead for lift lines on weekends."
-2025-03-17,Jackson Hole,Wyoming,Ikon,March,8,10,7,5,"Great mountain, spring sun, and lots of fun terrain."
-2025-01-20,Winter Park,Colorado,Epic,January,8,8,7,7,"Fun tree skiing and a relaxed vibe. Good value for a full day out."
-2025-02-12,Winter Park,Colorado,Epic,February,9,9,7,7,"Great snow and plenty to ski across a big, varied mountain."
-2025-03-08,Winter Park,Colorado,Epic,March,8,8,8,8,"Sunny spring laps, manageable crowds, and a friendly mountain feel."
-2025-01-29,Steamboat,Colorado,Ikon,January,9,8,7,6,"Champagne powder lived up to its name. Lovely trees and a fun town."
-2025-02-23,Steamboat,Colorado,Ikon,February,9,9,6,6,"Soft snow and great glades. The mountain has a welcoming feel."
-2025-03-14,Steamboat,Colorado,Ikon,March,8,8,8,7,"A great spring visit with good snow and fewer crowds midweek."
-2025-01-07,Mount Baker,Washington,Independent,January,10,8,8,8,"So much snow and a laid-back local vibe. Bring your storm-day gear."
-2025-02-18,Mount Baker,Washington,Independent,February,9,8,8,8,"Deep snow and a relaxed experience. Great value compared with bigger resorts."
-2025-03-02,Mount Baker,Washington,Independent,March,8,8,9,8,"Still plenty of snow, friendly people, and almost no waiting."
-2025-01-16,Whistler Blackcomb,British Columbia,Epic,January,9,10,5,4,"Massive terrain and gorgeous views. Take your time exploring the mountain."
-2025-02-26,Whistler Blackcomb,British Columbia,Epic,February,9,10,5,4,"Unreal scale and plenty of choices. The village is fun after the lifts close."
-2025-03-19,Whistler Blackcomb,British Columbia,Epic,March,8,9,6,5,"Big spring days and so much terrain. Arrive early to avoid the queues."
+Timestamp,Resort,Region,Pass,Month Visited,Snow (1-10),Terrain (1-10),Crowds (1-10, 10 = no crowds),Price (1-10, 10 = cheap),Review,Typical opening
+2025-01-18,Alta,Utah,Ikon,January,9,9,7,6,"Deep powder and incredible terrain. Get there early for the best day.",Mid-November
+2025-02-08,Alta,Utah,Ikon,February,10,9,6,6,"The best snow day of the season. Lots of great lines for strong skiers.",Mid-November
+2025-03-12,Alta,Utah,Ikon,March,8,9,8,7,"Still fantastic snow and fewer people midweek. A mountain worth returning to.",Mid-November
+2025-01-25,Snowbird,Utah,Ikon,January,10,10,5,5,"Huge terrain and deep snow. The tram gets busy but the mountain is worth it.",Mid-November
+2025-02-20,Snowbird,Utah,Ikon,February,9,10,6,5,"Amazing steeps and snow. Plenty of mountain to explore even on a busy day.",Mid-November
+2025-03-05,Snowbird,Utah,Ikon,March,8,9,7,6,"Great spring conditions and a little more room to roam.",Mid-November
+2025-01-14,Park City,Utah,Ikon,January,7,8,5,5,"Lots of terrain and fun places to explore. Crowds build near the base.",Mid-November
+2025-02-16,Park City,Utah,Ikon,February,8,8,5,4,"A huge mountain with something for everyone. Lift lines can be long.",Mid-November
+2025-03-22,Park City,Utah,Ikon,March,7,8,7,6,"Quieter later in the season, with sunny afternoons and plenty of groomers.",Mid-November
+2025-01-10,Jackson Hole,Wyoming,Ikon,January,9,10,6,5,"Big mountain energy, excellent snow, and terrain that keeps you coming back.",Late November
+2025-02-04,Jackson Hole,Wyoming,Ikon,February,10,10,5,4,"Excellent snowfall and steep terrain. Plan ahead for lift lines on weekends.",Late November
+2025-03-17,Jackson Hole,Wyoming,Ikon,March,8,10,7,5,"Great mountain, spring sun, and lots of fun terrain.",Late November
+2025-01-20,Winter Park,Colorado,Epic,January,8,8,7,7,"Fun tree skiing and a relaxed vibe. Good value for a full day out.",Mid-November
+2025-02-12,Winter Park,Colorado,Epic,February,9,9,7,7,"Great snow and plenty to ski across a big, varied mountain.",Mid-November
+2025-03-08,Winter Park,Colorado,Epic,March,8,8,8,8,"Sunny spring laps, manageable crowds, and a friendly mountain feel.",Mid-November
+2025-01-29,Steamboat,Colorado,Ikon,January,9,8,7,6,"Champagne powder lived up to its name. Lovely trees and a fun town.",Mid-November
+2025-02-23,Steamboat,Colorado,Ikon,February,9,9,6,6,"Soft snow and great glades. The mountain has a welcoming feel.",Mid-November
+2025-03-14,Steamboat,Colorado,Ikon,March,8,8,8,7,"A great spring visit with good snow and fewer crowds midweek.",Mid-November
+2025-01-07,Mount Baker,Washington,Independent,January,10,8,8,8,"So much snow and a laid-back local vibe. Bring your storm-day gear.",Late November
+2025-02-18,Mount Baker,Washington,Independent,February,9,8,8,8,"Deep snow and a relaxed experience. Great value compared with bigger resorts.",Late November
+2025-03-02,Mount Baker,Washington,Independent,March,8,8,9,8,"Still plenty of snow, friendly people, and almost no waiting.",Late November
+2025-01-16,Whistler Blackcomb,British Columbia,Epic,January,9,10,5,4,"Massive terrain and gorgeous views. Take your time exploring the mountain.",Late November
+2025-02-26,Whistler Blackcomb,British Columbia,Epic,February,9,10,5,4,"Unreal scale and plenty of choices. The village is fun after the lifts close.",Late November
+2025-03-19,Whistler Blackcomb,British Columbia,Epic,March,8,9,6,5,"Big spring days and so much terrain. Arrive early to avoid the queues.",Late November
+2025-01-13,Deer Valley,Utah,Ikon,January,8,9,7,5,"Polished service, lovely groomers, and beautiful mountain views.",Early December
+2025-02-15,Deer Valley,Utah,Ikon,February,9,9,7,5,"Great grooming and welcoming mountain service. Check current lift access before you go.",Early December
+2025-01-19,Palisades Tahoe,California,Ikon,January,9,10,5,6,"Huge terrain and a lively mountain feel. Conditions can change quickly across the resort.",Late November
+2025-02-22,Palisades Tahoe,California,Ikon,February,10,10,5,6,"Big storm-day energy and challenging terrain. Check the latest mountain report for wind holds.",Late November
+2025-01-11,Heavenly,California / Nevada,Epic,January,8,8,6,5,"The lake views are incredible, with a mix of groomers and steeper runs.",Late November
+2025-02-19,Heavenly,California / Nevada,Epic,February,9,8,5,5,"Beautiful views and good snow. Wind can affect upper mountain lift operations.",Late November
+2025-01-24,Northstar,California,Epic,January,8,8,6,5,"Smooth groomers and a relaxed base village make for a fun ski day.",Late November
+2025-02-27,Northstar,California,Epic,February,8,8,6,5,"Good family-friendly terrain and well-groomed runs. Check conditions after storms.",Late November
+2025-01-09,Kirkwood,California,Epic,January,9,9,8,7,"A quieter, rugged mountain with excellent snowfall and steep terrain.",Early December
+2025-02-13,Kirkwood,California,Epic,February,10,9,8,7,"Deep snow and fewer crowds. The high-elevation weather can be intense.",Early December
+2025-01-17,Sugar Bowl,California,Independent,January,9,8,7,7,"A classic Tahoe feel with great snowfall and plenty to explore.",Late November
+2025-02-24,Sugar Bowl,California,Independent,9,9,7,7,"Lots of snow and a friendly, low-key atmosphere. Check road conditions on storm days.",Late November

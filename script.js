@@ -2,29 +2,26 @@
    1) Paste your published Google Sheet CSV URL into SHEET_CSV_URL below.
       Leave it blank to use the bundled sample-reviews.csv.
    2) Paste the Google Form's formResponse URL into GOOGLE_FORM_RESPONSE_URL.
-   3) Replace each FORM_ENTRY_IDS value with the matching Google Forms entry ID
-      (the number from the form field's entry.######## name in the prefilled URL).
-   This is a static site: Google Forms submissions use a no-cors request, so the
-   browser cannot verify whether Google accepted a submission.
+   3) Replace each FORM_ENTRY_IDS value with the matching Google Forms entry ID.
+   Static-site Google Forms submissions use no-cors, so acceptance cannot be verified.
 ========================================================================= */
-const SHEET_CSV_URL = ""; // Example: https://docs.google.com/spreadsheets/d/e/PUBLISHED_ID/pub?output=csv
-const GOOGLE_FORM_RESPONSE_URL = ""; // Example: https://docs.google.com/forms/d/e/FORM_ID/formResponse
+const SHEET_CSV_URL = ""; // Published Google Sheet CSV URL
+const GOOGLE_FORM_RESPONSE_URL = ""; // Google Form formResponse URL
 const FORM_ENTRY_IDS = {
-  resort: "",  // entry.######## — Resort
-  region: "",  // entry.######## — Region
-  pass: "",    // entry.######## — Pass
-  month: "",   // entry.######## — Month Visited
-  snow: "",    // entry.######## — Snow (1-10)
-  terrain: "", // entry.######## — Terrain (1-10)
-  crowds: "",  // entry.######## — Crowds (1-10)
-  price: "",   // entry.######## — Price (1-10)
-  review: ""   // entry.######## — Review
+  resort: "", region: "", pass: "", month: "", snow: "", terrain: "", crowds: "", price: "", review: ""
 };
 
 const CSV_SAMPLE_URL = "sample-reviews.csv";
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const SCORE_KEYS = ["snow", "terrain", "crowds", "price"];
 const SCORE_LABELS = { snow: "Snow", terrain: "Terrain", crowds: "Crowds", price: "Price" };
+// Approximate seasonal patterns, not a promise or a current-season opening announcement.
+const TYPICAL_OPENINGS = {
+  "alta": "Mid-November", "snowbird": "Mid-November", "park city": "Mid-November", "jackson hole": "Late November",
+  "winter park": "Mid-November", "steamboat": "Mid-November", "mount baker": "Late November", "whistler blackcomb": "Late November",
+  "deer valley": "Early December", "palisades tahoe": "Late November", "heavenly": "Late November",
+  "northstar": "Late November", "northstar california": "Late November", "kirkwood": "Early December", "sugar bowl": "Late November"
+};
 let allReviews = [];
 let sortKey = "overall";
 let sortDirection = -1;
@@ -52,7 +49,6 @@ function parseCSV(text) {
     return record;
   });
 }
-
 function normalizeReview(row) {
   const get = (...names) => {
     const key = Object.keys(row).find(header => names.some(name => header.toLowerCase().trim() === name.toLowerCase()));
@@ -64,12 +60,11 @@ function normalizeReview(row) {
   };
   const timestamp = get("Timestamp");
   return {
-    timestamp: timestamp ? new Date(timestamp) : null,
-    resort: get("Resort"), region: get("Region"), pass: get("Pass"), month: get("Month Visited", "Month"),
-    snow: numeric("snow"), terrain: numeric("terrain"), crowds: numeric("crowds"), price: numeric("price"), review: get("Review")
+    timestamp: timestamp ? new Date(timestamp) : null, resort: get("Resort"), region: get("Region"), pass: get("Pass"),
+    month: get("Month Visited", "Month"), snow: numeric("snow"), terrain: numeric("terrain"), crowds: numeric("crowds"),
+    price: numeric("price"), review: get("Review"), opening: get("Typical opening", "Opening day", "Opening")
   };
 }
-
 async function loadReviews() {
   const urls = SHEET_CSV_URL.trim() ? [SHEET_CSV_URL.trim(), CSV_SAMPLE_URL] : [CSV_SAMPLE_URL];
   for (const url of urls) {
@@ -82,7 +77,6 @@ async function loadReviews() {
   }
   allReviews = [];
 }
-
 function mean(values) {
   const valid = values.filter(value => Number.isFinite(value));
   return valid.length ? valid.reduce((sum, value) => sum + value, 0) / valid.length : null;
@@ -102,12 +96,14 @@ function getResorts() {
       const month = monthName(review.month);
       if (!month) return;
       if (!months[month]) months[month] = {};
-      SCORE_KEYS.filter(key => key === "snow" || key === "crowds").forEach(key => {
+      ["snow", "crowds"].forEach(key => {
         if (!months[month][key]) months[month][key] = [];
         if (review[key] != null) months[month][key].push(review[key]);
       });
     });
-    return { ...resort, region: mostCommon(resort.reviews.map(review => review.region)), passes: [...new Set(resort.reviews.map(review => review.pass).filter(Boolean))], scores, overall: mean(Object.values(scores)), months };
+    const key = resort.name.toLowerCase();
+    const opening = resort.reviews.find(review => review.opening)?.opening || TYPICAL_OPENINGS[key] || "Varies by season";
+    return { ...resort, opening, region: mostCommon(resort.reviews.map(review => review.region)), passes: [...new Set(resort.reviews.map(review => review.pass).filter(Boolean))], scores, overall: mean(Object.values(scores)), months };
   });
 }
 function mostCommon(values) {
@@ -133,8 +129,7 @@ function updateFilters() {
   fill("region-filter", regions, "regions"); fill("pass-filter", passes, "passes");
 }
 function visibleResorts() {
-  const region = document.getElementById("region-filter").value;
-  const pass = document.getElementById("pass-filter").value;
+  const region = document.getElementById("region-filter").value, pass = document.getElementById("pass-filter").value;
   return getResorts().filter(resort => (!region || resort.reviews.some(review => review.region === region)) && (!pass || resort.reviews.some(review => review.pass === pass)));
 }
 function renderRankings() {
@@ -156,8 +151,7 @@ function renderResortSelect() {
   renderMonthChart();
 }
 function renderMonthChart() {
-  const name = document.getElementById("month-resort").value;
-  const resort = getResorts().find(item => item.name === name);
+  const name = document.getElementById("month-resort").value, resort = getResorts().find(item => item.name === name);
   const chart = document.getElementById("month-chart"), empty = document.getElementById("month-chart-empty");
   document.getElementById("chart-resort-name").textContent = resort?.name || "Choose a resort";
   const activeMonths = MONTHS.filter(month => resort?.months[month]?.snow?.length || resort?.months[month]?.crowds?.length);
@@ -169,26 +163,20 @@ function renderMonthChart() {
   }).join("");
 }
 function renderSearch(query) {
-  const section = document.getElementById("search-results-section"), target = document.getElementById("search-results");
-  const normalized = query.trim().toLowerCase();
+  const section = document.getElementById("search-results-section"), target = document.getElementById("search-results"), normalized = query.trim().toLowerCase();
   if (!normalized) { section.hidden = true; return; }
   section.hidden = false;
   const matches = getResorts().filter(resort => resort.name.toLowerCase().includes(normalized) || resort.region.toLowerCase().includes(normalized)).sort((a, b) => (b.overall || 0) - (a.overall || 0));
   if (!matches.length) { target.innerHTML = '<p class="no-results">No resorts found. Try another name or region.</p>'; return; }
   target.innerHTML = matches.map(resort => {
     const recent = [...resort.reviews].sort((a, b) => (b.timestamp?.getTime() || 0) - (a.timestamp?.getTime() || 0)).filter(review => review.review).slice(0, 2);
-    return `<article class="resort-card"><span class="resort-card-score">${scoreText(resort.overall)}<small>/10</small></span><h3>${safe(resort.name)}</h3><div class="card-subtitle">${safe(resort.region)} · ${resort.reviews.length} ${resort.reviews.length === 1 ? "review" : "reviews"}</div><div class="mini-scores">${SCORE_KEYS.map(key => `<span>${SCORE_LABELS[key]} <b>${scoreText(resort.scores[key])}</b></span>`).join("")}</div>${recent.map(review => `<div class="recent-review"><strong>${safe(review.month || "Skier review")}${review.pass ? ` · ${safe(review.pass)}` : ""}</strong><p class="review-quote">“${safe(review.review)}”</p></div>`).join("") || '<div class="recent-review">No written reviews yet.</div>'}</article>`;
+    return `<article class="resort-card"><span class="resort-card-score">${scoreText(resort.overall)}<small>/10</small></span><h3>${safe(resort.name)}</h3><div class="card-subtitle">${safe(resort.region)} · ${resort.reviews.length} ${resort.reviews.length === 1 ? "review" : "reviews"}</div><div class="opening-date"><span class="opening-icon" aria-hidden="true">❄</span><span><strong>Typical opening</strong> · ${safe(resort.opening)}</span><span class="opening-note">Varies yearly</span></div><div class="mini-scores">${SCORE_KEYS.map(key => `<span>${SCORE_LABELS[key]} <b>${scoreText(resort.scores[key])}</b></span>`).join("")}</div>${recent.map(review => `<div class="recent-review"><strong>${safe(review.month || "Skier review")}${review.pass ? ` · ${safe(review.pass)}` : ""}</strong><p class="review-quote">“${safe(review.review)}”</p></div>`).join("") || '<div class="recent-review">No written reviews yet.</div>'}</article>`;
   }).join("");
 }
-function getMonthRating(resort, month, key) {
-  const monthReviews = resort.reviews.filter(review => monthName(review.month) === month && review[key] != null);
-  return mean(monthReviews.map(review => review[key]));
-}
+function getMonthRating(resort, month, key) { return mean(resort.reviews.filter(review => monthName(review.month) === month && review[key] != null).map(review => review[key])); }
 function recommend(month, priority) {
   return getResorts().map(resort => {
-    const monthly = getMonthRating(resort, month, priority);
-    const category = monthly ?? resort.scores[priority];
-    const overall = resort.overall ?? 0;
+    const monthly = getMonthRating(resort, month, priority), category = monthly ?? resort.scores[priority], overall = resort.overall ?? 0;
     const score = category == null ? null : category * 0.75 + overall * 0.25;
     const reason = monthly != null ? `${scoreText(monthly)}/10 ${SCORE_LABELS[priority].toLowerCase()} in ${month}; ${resort.reviews.length} community ${resort.reviews.length === 1 ? "review" : "reviews"}.` : category != null ? `No ${month} scores yet — based on its ${scoreText(category)}/10 ${SCORE_LABELS[priority].toLowerCase()} average.` : "Not enough ratings for this priority yet.";
     return { resort, score, reason };
@@ -205,7 +193,6 @@ function fillMonthSelects() {
   });
 }
 function refreshDataUI() { updateFilters(); renderRankings(); renderResortSelect(); }
-
 async function submitGoogleForm(review) {
   const configured = GOOGLE_FORM_RESPONSE_URL && Object.values(FORM_ENTRY_IDS).every(id => /^entry\.\d+$/.test(id));
   if (!configured) return false;
@@ -215,39 +202,25 @@ async function submitGoogleForm(review) {
   return true;
 }
 function init() {
-  fillMonthSelects();
-  loadReviews().then(refreshDataUI);
+  fillMonthSelects(); loadReviews().then(refreshDataUI);
   document.getElementById("region-filter").addEventListener("change", renderRankings);
   document.getElementById("pass-filter").addEventListener("change", renderRankings);
-  document.querySelectorAll("th[data-sort]").forEach(header => header.addEventListener("click", () => {
-    const key = header.dataset.sort;
-    sortDirection = key === sortKey ? -sortDirection : (key === "resort" || key === "region" ? 1 : -1);
-    sortKey = key; renderRankings();
-  }));
+  document.querySelectorAll("th[data-sort]").forEach(header => header.addEventListener("click", () => { const key = header.dataset.sort; sortDirection = key === sortKey ? -sortDirection : (key === "resort" || key === "region" ? 1 : -1); sortKey = key; renderRankings(); }));
   document.getElementById("month-resort").addEventListener("change", renderMonthChart);
   document.getElementById("search-form").addEventListener("submit", event => { event.preventDefault(); renderSearch(document.getElementById("resort-search").value); document.getElementById("search-results-section").scrollIntoView({ behavior: "smooth" }); });
   document.getElementById("resort-search").addEventListener("input", event => { if (!event.target.value.trim()) document.getElementById("search-results-section").hidden = true; });
   document.getElementById("clear-search").addEventListener("click", () => { document.getElementById("resort-search").value = ""; document.getElementById("search-results-section").hidden = true; });
-  document.getElementById("recommend-form").addEventListener("submit", event => { event.preventDefault(); const priority = new FormData(event.currentTarget).get("priority"); renderRecommendations(document.getElementById("recommend-month").value, priority); });
+  document.getElementById("recommend-form").addEventListener("submit", event => { event.preventDefault(); renderRecommendations(document.getElementById("recommend-month").value, new FormData(event.currentTarget).get("priority")); });
   ["snow", "terrain", "crowds", "price"].forEach(key => document.getElementById(`rating-${key}`).addEventListener("input", event => { document.getElementById(`value-${key}`).textContent = event.target.value; }));
   document.getElementById("review-form").addEventListener("submit", async event => {
-    event.preventDefault();
-    const form = event.currentTarget, status = document.getElementById("form-status"), submit = form.querySelector('button[type="submit"]');
-    const review = Object.fromEntries(new FormData(form));
+    event.preventDefault(); const form = event.currentTarget, status = document.getElementById("form-status"), submit = form.querySelector('button[type="submit"]'), review = Object.fromEntries(new FormData(form));
     status.textContent = ""; submit.disabled = true; submit.querySelector("span").textContent = "…";
-    try {
-      const sent = await submitGoogleForm(review);
-      if (!sent) status.textContent = "Thanks! The form is not connected yet, so this review was not sent. Add your Google Form URL and entry IDs in script.js.";
-    } catch (error) {
-      console.error("Google Form submission could not be sent.", error);
-      status.textContent = "We couldn't send your review just now. Please try again.";
-      submit.disabled = false; submit.querySelector("span").textContent = "→"; return;
-    }
+    try { const sent = await submitGoogleForm(review); if (!sent) status.textContent = "Thanks! The form is not connected yet, so this review was not sent. Add your Google Form URL and entry IDs in script.js."; }
+    catch (error) { console.error("Google Form submission could not be sent.", error); status.textContent = "We couldn't send your review just now. Please try again."; submit.disabled = false; submit.querySelector("span").textContent = "→"; return; }
     form.hidden = true; document.getElementById("thank-you").hidden = false;
   });
   document.getElementById("write-another").addEventListener("click", () => { document.getElementById("thank-you").hidden = true; const form = document.getElementById("review-form"); form.reset(); ["snow", "terrain", "crowds", "price"].forEach(key => document.getElementById(`value-${key}`).textContent = document.getElementById(`rating-${key}`).value); form.hidden = false; form.querySelector('button[type="submit"]').disabled = false; });
-  const themeToggle = document.getElementById("theme-toggle");
-  const setTheme = theme => { document.documentElement.dataset.theme = theme; themeToggle.querySelector(".theme-icon").textContent = theme === "dark" ? "☀" : "☾"; themeToggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`); try { localStorage.setItem("alpine-theme", theme); } catch {} };
+  const themeToggle = document.getElementById("theme-toggle"), setTheme = theme => { document.documentElement.dataset.theme = theme; themeToggle.querySelector(".theme-icon").textContent = theme === "dark" ? "☀" : "☾"; themeToggle.setAttribute("aria-label", `Switch to ${theme === "dark" ? "light" : "dark"} mode`); try { localStorage.setItem("alpine-theme", theme); } catch {} };
   try { setTheme(localStorage.getItem("alpine-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")); } catch { setTheme("light"); }
   themeToggle.addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
   const menuToggle = document.getElementById("menu-toggle"), nav = document.querySelector(".main-nav");

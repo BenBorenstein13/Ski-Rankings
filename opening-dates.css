@@ -1,0 +1,5 @@
+/* Resort card season information */
+.opening-date{display:flex;align-items:center;gap:8px;margin:12px 0 10px;padding:9px 10px;border-radius:4px;background:var(--surface-alt);font-size:10px;color:var(--muted)}
+.opening-date .opening-icon{font-size:14px;color:var(--teal)}
+.opening-date strong{color:var(--ink);font-weight:700}
+.opening-date .opening-note{margin-left:auto;font-size:9px;color:var(--muted)}
